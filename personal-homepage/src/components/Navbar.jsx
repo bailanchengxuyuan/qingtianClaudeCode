@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import profile from '../data/profile';
 
 const navLinks = [
   { href: '#about', label: '关于' },
@@ -9,12 +10,25 @@ const navLinks = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const scrolledRef = useRef(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      // Only call setState if value actually changes
+      if (isScrolled !== scrolledRef.current) {
+        scrolledRef.current = isScrolled;
+        setScrolled(isScrolled);
+      }
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const initials = profile.name
+    .split('')
+    .filter((_, i, a) => i === 0 || i === a.length - 1)
+    .join('');
 
   return (
     <nav
@@ -29,7 +43,7 @@ export default function Navbar() {
           href="#"
           className="text-sm font-semibold tracking-tight text-neutral-950 hover:text-neutral-600 transition-colors"
         >
-          ZS
+          {initials}
         </a>
         <div className="flex items-center gap-6">
           {navLinks.map((link) => (

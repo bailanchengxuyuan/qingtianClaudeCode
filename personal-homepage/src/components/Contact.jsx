@@ -1,13 +1,15 @@
 import ScrollReveal from './ScrollReveal';
-import { GitHub, X, LinkedIn, Mail } from './Icons';
+import { SOCIAL_ICONS } from './Icons';
 import profile from '../data/profile';
 
-const iconMap = {
-  github: { Icon: GitHub, label: 'GitHub' },
-  twitter: { Icon: X, label: 'X' },
-  linkedin: { Icon: LinkedIn, label: 'LinkedIn' },
-  email: { Icon: Mail, label: 'Email' },
-};
+const socialLinks = Object.entries(profile.social)
+  .filter(([key]) => key !== 'email')
+  .map(([key, href]) => ({
+    key,
+    href,
+    Icon: SOCIAL_ICONS[key],
+    label: key === 'twitter' ? 'X' : key[0].toUpperCase() + key.slice(1),
+  }));
 
 export default function Contact() {
   return (
@@ -36,26 +38,21 @@ export default function Contact() {
 
         <ScrollReveal delay={0.3}>
           <div className="mt-8 flex items-center justify-center gap-6">
-            {Object.entries(profile.social)
-              .filter(([key]) => key !== 'email')
-              .map(([key, href]) => {
-                const { Icon, label } = iconMap[key];
-                return (
-                  <a
-                    key={key}
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex flex-col items-center gap-1.5 text-neutral-400 hover:text-neutral-950 transition-colors"
-                    aria-label={label}
-                  >
-                    <Icon size={20} strokeWidth={1.5} />
-                    <span className="text-[10px] font-medium uppercase tracking-wider">
-                      {label}
-                    </span>
-                  </a>
-                );
-              })}
+            {socialLinks.map(({ key, href, Icon, label }) => (
+              <a
+                key={key}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex flex-col items-center gap-1.5 text-neutral-400 hover:text-neutral-950 transition-colors"
+                aria-label={label}
+              >
+                <Icon size={20} />
+                <span className="text-[10px] font-medium uppercase tracking-wider">
+                  {label}
+                </span>
+              </a>
+            ))}
           </div>
         </ScrollReveal>
       </div>

@@ -3,6 +3,13 @@
  * No external icon library dependency needed.
  */
 
+// Shared animation easing curve
+export const EASE_OUT = [0.25, 0.1, 0.25, 1];
+
+// Shared social platform → icon component mapping
+export const SOCIAL_ICONS = {};
+// Assigned below after all components are defined
+
 export function GitHub({ size = 20, className = '' }) {
   return (
     <svg
@@ -138,3 +145,9 @@ export function ExternalLink({ size = 18, className = '' }) {
     </svg>
   );
 }
+
+// Initialize the shared icon map (must be after all exports are defined)
+SOCIAL_ICONS.github = GitHub;
+SOCIAL_ICONS.twitter = X;
+SOCIAL_ICONS.linkedin = LinkedIn;
+SOCIAL_ICONS.email = Mail;

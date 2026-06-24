@@ -1,23 +1,21 @@
 import { ArrowUp } from './Icons';
 
-export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+const YEAR = new Date().getFullYear();
 
+export default function Footer() {
   return (
     <footer className="py-12 px-6 border-t border-neutral-200">
       <div className="mx-auto max-w-3xl flex items-center justify-between">
         <p className="text-xs text-neutral-400">
-          &copy; {new Date().getFullYear()} All rights reserved.
+          &copy; {YEAR} All rights reserved.
         </p>
         <button
-          onClick={scrollToTop}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-neutral-700 transition-colors"
-          aria-label="Back to top"
+          aria-label="返回顶部"
         >
-          <ArrowUp size={14} strokeWidth={1.5} />
-          <span>Back to top</span>
+          <ArrowUp size={14} />
+          <span>返回顶部</span>
         </button>
       </div>
     </footer>
