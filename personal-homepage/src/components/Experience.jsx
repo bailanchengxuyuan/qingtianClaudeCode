@@ -4,15 +4,16 @@ import profile from '../data/profile';
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-24 sm:py-32 px-6">
+    <section id="experience" className="py-28 sm:py-36 px-6">
       <div className="mx-auto max-w-3xl">
         <ScrollReveal>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-950">
+          <div className="section-rule" />
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-neutral-950">
             经历
           </h2>
         </ScrollReveal>
 
-        <div className="mt-12">
+        <div className="mt-14">
           {profile.experience.map((item, i) => (
             <TimelineItem key={i} item={item} index={i} />
           ))}

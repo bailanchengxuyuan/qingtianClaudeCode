@@ -10,12 +10,13 @@ const navLinks = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
   const scrolledRef = useRef(false);
 
+  // Scroll state
   useEffect(() => {
     const onScroll = () => {
       const isScrolled = window.scrollY > 20;
-      // Only call setState if value actually changes
       if (isScrolled !== scrolledRef.current) {
         scrolledRef.current = isScrolled;
         setScrolled(isScrolled);
@@ -23,6 +24,31 @@ export default function Navbar() {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Active section detection
+  useEffect(() => {
+    const sectionIds = navLinks.map((l) => l.href.slice(1));
+    const observers = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(`#${id}`);
+          }
+        },
+        { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+      );
+
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
   const initials = profile.name
@@ -39,22 +65,36 @@ export default function Navbar() {
       }`}
     >
       <div className="mx-auto max-w-3xl px-6 h-16 flex items-center justify-between">
+        {/* Logo */}
         <a
           href="#"
-          className="text-sm font-semibold tracking-tight text-neutral-950 hover:text-neutral-600 transition-colors"
+          className="text-sm font-semibold tracking-tight text-neutral-950 hover:text-neutral-600 transition-colors duration-200"
         >
           {initials}
         </a>
-        <div className="flex items-center gap-6">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-neutral-500 hover:text-neutral-950 transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
+
+        {/* Nav links */}
+        <div className="flex items-center gap-1">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.href;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`relative px-3 py-1.5 text-sm transition-colors duration-200 rounded-md ${
+                  isActive
+                    ? 'text-neutral-950'
+                    : 'text-neutral-500 hover:text-neutral-800'
+                }`}
+              >
+                {link.label}
+                {/* Active indicator — thin underline */}
+                {isActive && (
+                  <span className="absolute bottom-0 left-3 right-3 h-px bg-neutral-400 rounded-full" />
+                )}
+              </a>
+            );
+          })}
         </div>
       </div>
     </nav>
