@@ -14,10 +14,6 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
-defaults:
-  run:
-    working-directory: personal-homepage
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -33,14 +29,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: personal-homepage/package-lock.json
 
       - name: Install dependencies
         run: npm ci
+        working-directory: personal-homepage
 
       - name: Build
         run: npm run build
+        working-directory: personal-homepage
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
